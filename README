@@ -1,0 +1,58 @@
+wats 0.2
+==========================
+
+Notes:
+--------------------------
+
+At present, wats is designed for systems administrators (well, a system
+administrator- me), and those familiar with mysql/php. There are many rough
+edges. Any help in this area (patches, documentation, etc) is welcome. wats was
+designed for internal use only and I had not given any thought to releasing it
+until several other area schools expressed interest. 
+
+
+Installation Instructions:
+--------------------------
+
+   1. Unpack the archive: tar -xzf wats-0.2.tar.gz A directory called 'wats'
+will be created in the current directory. Move this directory to the document
+root of your webserver as appropriate
+   
+   2. Edit the file wats/wats-tables.sql:
+          * On line 283, change the administrator information as appropriate.
+this will be the first user in the system. More can be added once it's
+operational.
+          * On lines 286-290, set the initial config variables as appropriate.
+At present, these are the only values. More will be added in later releases of
+wats. unixroot is the complete path to your installation of wats. For example,
+if you've put the wats directory in /var/www/localhost/htdocs, you should set
+the unixroot to /var/www/localhost/htdocs/wats. The corresponding webroot for
+this example would most likely be http://localhost/wats. Substitute the DNS
+hostname of your server as appropriate. 
+   
+   3. Import the data into MySQL
+         1. Create a database for wats: mysql -u root -e "create database wats"
+         2. Set permissions on the database: mysql -u root -e "grant all on
+wats.* to 'wats'@'localhost' identified by 'hackme';"
+         2a. DON'T use that username/password!
+         3. Import the data: mysql -u root wats < wats-tables.sql 
+   
+   4. If you changed the database username or password above (and you should
+have) or your database is not running on the same machine as the web server,
+you will need to change the databse configuration in config.php. Set lines
+28-31 as appropriate.
+
+Known Issues:
+--------------------------
+
+Keep in mind- this is my 0.2 release, I'm just one person doing this in my
+spare time, etc...
+
+    * There is no way yet to add people in using wats. You will need to create
+people (both for users and for device assignment) directly in the database.
+    * The same is true of buildings/rooms
+    * Several of the statistics pages aren't built yet
+    * Some Dell devices have their type name in the model name, eg a 1700n
+printer will come thru as "Printer Laser 1700/1700n". If you change the model
+name, future devices will re-create it giving you two model records for the
+same model.
